@@ -1,35 +1,77 @@
-#! /bin/bash
+#! /usr/bin/env node
 
-set -e
+var spawn = require('child_process').spawn,
+    fs = require('fs');
 
-if [ -t 1 ]; then
-    SCRIPT_NAME="bootstrap:\033[33m"
-    LINE_END="\033[0m"
-else
-    SCRIPT_NAME="bootstrap:"
-    LINE_END=""
-fi
+var log = function (message) {
+    process.stderr.write('ninja-build: ' + message + '\n');
+}
 
-NINJA=ninja
-NINJA_VERSION=1.3.4
+var copyFile = function (source, target, cb) {
+  var cbCalled = false;
+  var rd = fs.createReadStream(source);
+  rd.on("error", function(err) {
+    done(err);
+  });
+  var wr = fs.createWriteStream(target);
+  wr.on("error", function(err) {
+    done(err);
+  });
+  wr.on("close", function(ex) {
+    done();
+  });
+  rd.pipe(wr);
+  var done = function (err) {
+    if (!cbCalled) {
+      cb(err);
+      cbCalled = true;
+    }
+  }
+}
 
-if [ ! -f $NINJA ] || [ $($NINJA --version) != $NINJA_VERSION ]; then
+var checkNinjaVersion = function (bin, ver, callback) {
+    if (!fs.existsSync(bin))
+        return callback(false);
+    var proc = spawn(bin, ['--version']);
+    proc.stdout.on('data', function (data) {
+        curVer += data
+    });
+    proc.on('close', function (code) {
+        console.log(curVer);
+        return callback(true);
+    });
+}
 
-    echo -e "$SCRIPT_NAME downloading ninja...$LINE_END"
-    if [ -d "ninja-build" ]; then
-        rm -rf ninja-build
-    fi
-    git clone git://github.com/martine/ninja.git ninja-build && cd ninja-build
-    git checkout -q v1.3.4
+var ninja = './ninja',
+    ninjaVersion = '1.3.4',
+    ninjaBuildFolder = 'ninja-build',
+    ninjaUrl = 'git://github.com/martine/ninja.git'
 
-    echo -e "$SCRIPT_NAME building ninja...$LINE_END"
-    ./bootstrap.py
-    cd ..
-    mkdir -p .build
-    cp ninja-build/ninja $NINJA
-    rm -rf ninja-build
-
-else
-    echo -e "$SCRIPT_NAME already got ninja, skipping.$LINE_END"
-fi
+checkNinjaVersion(ninja, ninjaVersion, function (isOk) {
+    if (isOk) {
+        log('already got ninja, skipping.');
+    } else {
+        log('downloading ninja...');
+        if (fs.existsSync(ninjaBuildFolder))
+            fs.unlinkSync(ninjaBuildFolder);
+        var proc = spawn('git', ['clone', ninjaUrl, ninjaBuildFolder],
+                         {stdio: 'inherit'});
+        proc.on('close', function (code) {
+            if (code != 0) process.exit(code);
+            proc = spawn('git', ['checkout', '-q', 'v' + ninjaVersion],
+                         {cwd: ninjaBuildFolder, stdio: 'inherit'});
+            proc.on('close', function (code) {
+                if (code != 0) process.exit(code);
+                log('building ninja...');
+                copyFile(ninjaBuildFolder + 'ninja', 'ninja', function(error) {
+                    if (error) {
+                        log('failed to copy ninja binary');
+                        process.exit(1);
+                    }
+                    fs.unlinkSync(ninjaBuildFolder);
+                })
+            });
+        });
+    }
+});
 
