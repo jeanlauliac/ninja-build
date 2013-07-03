@@ -13,7 +13,7 @@ $ npm install ninja-build --save-dev
 Then you can access the Ninja binary:
 
 ```sh
-$ node_modules/ninja-build/ninja
+$ node_modules/ninja-build/bin/ninja
 ```
 
 You can install the package globally as well; in this case `ninja` will be
