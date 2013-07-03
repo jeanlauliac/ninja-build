@@ -18,5 +18,5 @@
   "scripts": {
     "install" : "./bootstrap"
   },
-  "bin": "ninja"
+  "bin": { "ninja": "./ninja" }
 }
