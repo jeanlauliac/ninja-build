@@ -1,22 +1,30 @@
 {
-  "name": "ninja-build",
-  "version": "0.1.0",
-  "description": "Ninja build-system wrapper for Node.js.",
+  "name":           "ninja-build",
+  "version":        "0.1.0",
+  "description":    "Ninja build-system wrapper for Node.js.",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/undashes/ninja-build"
+    "type":         "git",
+    "url":          "https://github.com/undashes/ninja-build.git"
   },
+  "licenses":     [{
+    "type":         "MIT",
+    "url":          "https://raw.github.com/undashes/ninja-build/master/LICENSE"
+  }],
+  "keywords":       ["ninja", "build", "system"],
+  "bugs":           "https://github.com/undashes/ninja-build/issues",
   "author": {
-    "name": "Jean Lauliac",
-    "email": "jean@lauliac.com"
+    "name":         "Jean Lauliac",
+    "email":        "jean@lauliac.com"
   },
   "dependencies": {
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node":         ">=0.8.0"
   },
   "scripts": {
-    "install" : "./bootstrap"
+    "install" :     "./bootstrap"
   },
-  "bin": { "ninja": "./ninja" }
+  "bin": {
+    "ninja":        "./bin/ninja"
+  }
 }
