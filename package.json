@@ -1,0 +1,22 @@
+{
+  "name": "ninja-build",
+  "version": "0.1.0",
+  "description": "Ninja build-system wrapper for Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/undashes/ninja-build"
+  },
+  "author": {
+    "name": "Jean Lauliac",
+    "email": "jean@lauliac.com"
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "install" : "./bootstrap"
+  },
+  "bin": "ninja"
+}
