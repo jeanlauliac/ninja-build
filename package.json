@@ -22,7 +22,7 @@
     "node":         ">=0.8.0"
   },
   "scripts": {
-    "install" :     "./bootstrap"
+    "preinstall" :  "./bootstrap"
   },
   "bin": {
     "ninja":        "./bin/ninja"
