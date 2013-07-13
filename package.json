@@ -1,6 +1,6 @@
 {
   "name":           "ninja-build",
-  "version":        "0.1.1",
+  "version":        "0.1.2",
   "description":    "Ninja build-system wrapper for Node.js.",
   "keywords":       ["ninja", "build", "system", "wrapper"],
   "homepage":       "https://github.com/undashes/ninja-build",

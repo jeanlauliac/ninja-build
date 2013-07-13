@@ -1,0 +1,7 @@
+/node_modules/
+/.gitignore
+/.editorconfig
+/.npmignore
+/LICENSE
+/README.md
+/npm-debug.log

@@ -1,3 +1,4 @@
-node_modules/
-ninja-build/
-bin/
+/node_modules/
+/ninja-build/
+/bin/
+/npm-debug.log
