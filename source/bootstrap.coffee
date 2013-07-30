@@ -2,8 +2,8 @@ require 'shelljs/global'
 
 config.fatal = true
 
-if not which 'git'
-    echo 'ninja-build: require git.'
+if not which 'curl'
+    echo 'ninja-build: require curl.'
     exit 2
 
 if not which 'python'
@@ -11,19 +11,19 @@ if not which 'python'
     exit 3
 
 ninjaBinFile = 'bin/ninja'
-buildDir = 'ninja-build'
-ninjaVersion = '1.3.4\n'
+ninjaVersion = '1.3.4'
+buildDir = "ninja-#{ninjaVersion}"
+ninjaUrl = "https://github.com/martine/ninja/archive/v#{ninjaVersion}.tar.gz"
 
 if !test('-f', ninjaBinFile) or exec("#{ninjaBinFile} --version", \
-        silent: true).output != ninjaVersion
+        silent: true).output != "#{ninjaVersion}\n"
 
     echo 'ninja-build: downloading ninja...'
     if test '-d', buildDir
         rm '-rf', buildDir
 
-    exec "git clone git://github.com/martine/ninja.git #{buildDir}"
+    exec "curl -L #{ninjaUrl} | tar xz"
     cd buildDir
-    exec 'git checkout -q v1.3.4'
 
     echo 'ninja-build: building ninja...'
     exec './bootstrap.py'
