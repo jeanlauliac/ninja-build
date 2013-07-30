@@ -19,15 +19,15 @@ if [ ! -f $NINJA ] || [ $($NINJA --version) != $NINJA_VERSION ]; then
     if [ -d "ninja-build" ]; then
         rm -rf ninja-build
     fi
-    git clone git://github.com/martine/ninja.git ninja-build && cd ninja-build
-    git checkout -q v1.3.4
+    curl -L "https://github.com/martine/ninja/archive/v${NINJA_VERSION}.tar.gz" | tar xz
+    cd "ninja-${NINJA_VERSION}"
 
     echo -e "$SCRIPT_NAME building ninja...$LINE_END"
     ./bootstrap.py
     cd ..
     mkdir -p bin
-    cp ninja-build/ninja $NINJA
-    rm -rf ninja-build
+    cp "ninja-${NINJA_VERSION}/ninja" $NINJA
+    rm -rf "ninja-${NINJA_VERSION}"
 
 else
     echo -e "$SCRIPT_NAME already got ninja, skipping.$LINE_END"
